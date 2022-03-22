@@ -120,7 +120,7 @@ function pf_list_query_blog_pages(WP_Query $query): array {
 
 const PROJECTS_PAGE_ID   = 755;
 const BLOG_PAGE_ID       = 1651;
-const RESEARCHES_PAGE_ID = 954;
+const RESEARCHES_PAGE_ID = 1720;
 
 const SEARCH_QUERY_BASE = array(
     'numberposts'  => -1,
