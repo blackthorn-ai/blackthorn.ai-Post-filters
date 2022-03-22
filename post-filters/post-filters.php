@@ -5,7 +5,7 @@
 * Plugin Name: Post filters
 * Plugin URI: https://www.blackthorn.ai/
 * Description: This plugin add REST API for projects, research and blog posts filtering.
-* Version: 1.0
+* Version: 2022.03.22.1
 * Author: Pavlo Tymoshenko
 **/
 
@@ -91,6 +91,7 @@ function pf_list_query_research_pages(WP_Query $query): array {
             'description' => pf_cut_words(get_field('description', $page->ID), 240),
             'keywords'    => get_field('keyword_labels', $page->ID),
             'pdf'         => get_field('pdf_link', $page->ID),
+            'article'     => get_field('article_link', $page->ID),
             'publication_date'=> get_field('publication_date', $page->ID),
             'publisher'   => get_field('publisher', $page->ID),
             'title'       => $page->post_title,
