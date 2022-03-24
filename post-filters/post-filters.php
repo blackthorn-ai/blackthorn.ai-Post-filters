@@ -5,7 +5,7 @@
 * Plugin Name: Post filters
 * Plugin URI: https://www.blackthorn.ai/
 * Description: This plugin add REST API for projects, research and blog posts filtering.
-* Version: 2022.03.22.1
+* Version: 2022.03.24
 * Author: Pavlo Tymoshenko
 **/
 
@@ -78,7 +78,12 @@ function pf_list_query_project_pages(WP_Query $query): array {
             'keywords'    => get_field('keyword_labels', $page->ID),
             'link'        => $page->post_name,
             'title'       => $page->post_title,
-            'thumbnail'   => get_the_post_thumbnail_url($page->ID)
+            'thumbnail'   => get_the_post_thumbnail_url($page->ID),
+            'filtering'   => array(
+                'keyword_labels'  => get_field('keyword_labels', $page->ID),
+                'service_labels'  => get_field('service_labels', $page->ID),
+                'industry_labels' => get_field('industry_labels', $page->ID)
+            )
         );
     };
 
@@ -91,11 +96,14 @@ function pf_list_query_research_pages(WP_Query $query): array {
             'description' => pf_cut_words(get_field('description', $page->ID), 240),
             'keywords'    => get_field('keyword_labels', $page->ID),
             'pdf'         => get_field('pdf_link', $page->ID),
-            'article'     => get_field('article_link', $page->ID),
             'publication_date'=> get_field('publication_date', $page->ID),
             'publisher'   => get_field('publisher', $page->ID),
             'title'       => $page->post_title,
-            'thumbnail'   => get_the_post_thumbnail_url($page->ID)
+            'thumbnail'   => get_the_post_thumbnail_url($page->ID),
+            'filtering'   => array(
+                'keyword_labels'  => get_field('keyword_labels', $page->ID),
+                'industry_labels' => get_field('industry_labels', $page->ID)
+            )
         );
     };
 
@@ -112,7 +120,10 @@ function pf_list_query_blog_pages(WP_Query $query): array {
             'time_to_read'=> get_field('time_to_read', $page->ID),
             'link'        => get_field('link', $page->ID),
             'title'       => $page->post_title,
-            'thumbnail'   => get_the_post_thumbnail_url($page->ID)
+            'thumbnail'   => get_the_post_thumbnail_url($page->ID),
+            'filtering'   => array(
+                'keyword_labels'  => get_field('keyword_labels', $page->ID)
+            )
         );
     };
 
