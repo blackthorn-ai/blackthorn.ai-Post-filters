@@ -5,7 +5,7 @@
 * Plugin Name: Post filters
 * Plugin URI: https://www.blackthorn.ai/
 * Description: This plugin add REST API for projects, research and blog posts filtering.
-* Version: 1.0
+* Version: 2022.03.24
 * Author: Pavlo Tymoshenko
 **/
 
@@ -78,7 +78,12 @@ function pf_list_query_project_pages(WP_Query $query): array {
             'keywords'    => get_field('keyword_labels', $page->ID),
             'link'        => $page->post_name,
             'title'       => $page->post_title,
-            'thumbnail'   => get_the_post_thumbnail_url($page->ID)
+            'thumbnail'   => get_the_post_thumbnail_url($page->ID),
+            'filtering'   => array(
+                'keyword_labels'  => get_field('keyword_labels', $page->ID),
+                'service_labels'  => get_field('service_labels', $page->ID),
+                'industry_labels' => get_field('industry_labels', $page->ID)
+            )
         );
     };
 
@@ -94,7 +99,11 @@ function pf_list_query_research_pages(WP_Query $query): array {
             'publication_date'=> get_field('publication_date', $page->ID),
             'publisher'   => get_field('publisher', $page->ID),
             'title'       => $page->post_title,
-            'thumbnail'   => get_the_post_thumbnail_url($page->ID)
+            'thumbnail'   => get_the_post_thumbnail_url($page->ID),
+            'filtering'   => array(
+                'keyword_labels'  => get_field('keyword_labels', $page->ID),
+                'industry_labels' => get_field('industry_labels', $page->ID)
+            )
         );
     };
 
@@ -111,7 +120,10 @@ function pf_list_query_blog_pages(WP_Query $query): array {
             'time_to_read'=> get_field('time_to_read', $page->ID),
             'link'        => get_field('link', $page->ID),
             'title'       => $page->post_title,
-            'thumbnail'   => get_the_post_thumbnail_url($page->ID)
+            'thumbnail'   => get_the_post_thumbnail_url($page->ID),
+            'filtering'   => array(
+                'keyword_labels'  => get_field('keyword_labels', $page->ID)
+            )
         );
     };
 
@@ -120,7 +132,7 @@ function pf_list_query_blog_pages(WP_Query $query): array {
 
 const PROJECTS_PAGE_ID   = 755;
 const BLOG_PAGE_ID       = 1651;
-const RESEARCHES_PAGE_ID = 954;
+const RESEARCHES_PAGE_ID = 1720;
 
 const SEARCH_QUERY_BASE = array(
     'numberposts'  => -1,
