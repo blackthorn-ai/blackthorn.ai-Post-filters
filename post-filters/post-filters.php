@@ -135,12 +135,12 @@ function pf_list_query_careers_pages(WP_Query $query): array {
     $extract_page = function($page): array {
         return array(
             'description' => pf_cut_words(get_field('description', $page->ID), 240),
-            'skills'    => get_field('keyword_labels', $page->ID),
+            'skills'    => get_field('skill_labels', $page->ID),
             'title'       => $page->post_title,
             'link'        => $page->post_name,
             'thumbnail'   => get_the_post_thumbnail_url($page->ID),
             'filtering'   => array(
-                'keyword_labels'  => get_field('keyword_labels', $page->ID)
+                'skill_labels'  => get_field('skill_labels', $page->ID)
             )
         );
     };
@@ -172,7 +172,7 @@ function pf_filter_project_pages(WP_REST_Request $request) {
         array('post_parent' => PROJECTS_PAGE_ID),
         pf_get_meta_query(
             $request,
-            ['industry_labels', 'service_labels', 'keyword_labels']
+            ['industry_labels', 'service_labels', 'keyword_labels', 'skill_labels']
         )));
 
     return new WP_REST_Response(pf_list_query_project_pages($query));
@@ -188,7 +188,7 @@ function pf_filter_blog_pages(WP_REST_Request $request) {
         array('post_parent' => BLOG_PAGE_ID),
         pf_get_meta_query(
             $request,
-            ['industry_labels', 'service_labels', 'keyword_labels']
+            ['industry_labels', 'service_labels', 'keyword_labels', 'skill_labels']
         )));
 
     return new WP_REST_Response(pf_list_query_blog_pages($query));
@@ -204,7 +204,7 @@ function pf_filter_researches(WP_REST_Request $request) {
         array('post_parent' => RESEARCHES_PAGE_ID),
         pf_get_meta_query(
             $request,
-            ['industry_labels', 'service_labels', 'keyword_labels']
+            ['industry_labels', 'service_labels', 'keyword_labels', 'skill_labels']
         )));
 
     return new WP_REST_Response(pf_list_query_research_pages($query));
@@ -220,7 +220,7 @@ function pf_filter_careers_pages(WP_REST_Request $request) {
         array('post_parent' => CAREERS_PAGE_ID),
         pf_get_meta_query(
             $request,
-            ['industry_labels', 'service_labels', 'keyword_labels']
+            ['industry_labels', 'service_labels', 'keyword_labels', 'skill_labels']
         )));
 
     return new WP_REST_Response(pf_list_query_careers_pages($query));
