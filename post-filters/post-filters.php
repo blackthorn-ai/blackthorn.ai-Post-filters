@@ -6,8 +6,8 @@
 * Plugin Name: Post filters
 * Plugin URI: https://www.blackthorn.ai/
 * Description: This plugin add REST API for projects, research, careers and blog posts filtering.
-* Version: 2022.03.24
-* Author: Pavlo Tymoshenko
+* Version: 2022.03.29
+* Author: Pavlo Tymoshenko, Anastasiia Hrynyshyn
 **/
 
 include_once 'text-utils.php';
@@ -151,7 +151,7 @@ function pf_list_query_careers_pages(WP_Query $query): array {
 const PROJECTS_PAGE_ID   = 755;
 const BLOG_PAGE_ID       = 1651;
 const RESEARCHES_PAGE_ID = 1720;
-const CAREERS_PAGE_ID       = 1796;
+const CAREERS_PAGE_ID    = 1796;
 
 const SEARCH_QUERY_BASE = array(
     'numberposts'  => -1,
