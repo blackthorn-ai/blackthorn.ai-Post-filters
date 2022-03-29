@@ -1,10 +1,11 @@
+
 <?php
 
 /**
 * @package Post filters
 * Plugin Name: Post filters
 * Plugin URI: https://www.blackthorn.ai/
-* Description: This plugin add REST API for projects, research and blog posts filtering.
+* Description: This plugin add REST API for projects, research, careers and blog posts filtering.
 * Version: 2022.03.24
 * Author: Pavlo Tymoshenko
 **/
@@ -130,9 +131,27 @@ function pf_list_query_blog_pages(WP_Query $query): array {
     return array_map($extract_page, $query->posts);
 }
 
+function pf_list_query_careers_pages(WP_Query $query): array {
+    $extract_page = function($page): array {
+        return array(
+            'description' => pf_cut_words(get_field('description', $page->ID), 240),
+            'skills'    => get_field('skill_labels', $page->ID),
+            'title'       => $page->post_title,
+            'link'        => $page->post_name,
+            'thumbnail'   => get_the_post_thumbnail_url($page->ID),
+            'filtering'   => array(
+                'skill_labels'  => get_field('skill_labels', $page->ID)
+            )
+        );
+    };
+
+    return array_map($extract_page, $query->posts);
+}
+
 const PROJECTS_PAGE_ID   = 755;
 const BLOG_PAGE_ID       = 1651;
 const RESEARCHES_PAGE_ID = 1720;
+const CAREERS_PAGE_ID       = 1796;
 
 const SEARCH_QUERY_BASE = array(
     'numberposts'  => -1,
@@ -153,7 +172,7 @@ function pf_filter_project_pages(WP_REST_Request $request) {
         array('post_parent' => PROJECTS_PAGE_ID),
         pf_get_meta_query(
             $request,
-            ['industry_labels', 'service_labels', 'keyword_labels']
+            ['industry_labels', 'service_labels', 'keyword_labels', 'skill_labels']
         )));
 
     return new WP_REST_Response(pf_list_query_project_pages($query));
@@ -169,7 +188,7 @@ function pf_filter_blog_pages(WP_REST_Request $request) {
         array('post_parent' => BLOG_PAGE_ID),
         pf_get_meta_query(
             $request,
-            ['industry_labels', 'service_labels', 'keyword_labels']
+            ['industry_labels', 'service_labels', 'keyword_labels', 'skill_labels']
         )));
 
     return new WP_REST_Response(pf_list_query_blog_pages($query));
@@ -185,10 +204,26 @@ function pf_filter_researches(WP_REST_Request $request) {
         array('post_parent' => RESEARCHES_PAGE_ID),
         pf_get_meta_query(
             $request,
-            ['industry_labels', 'service_labels', 'keyword_labels']
+            ['industry_labels', 'service_labels', 'keyword_labels', 'skill_labels']
         )));
 
     return new WP_REST_Response(pf_list_query_research_pages($query));
+}
+
+/**
+ * pf_filter_careers_pages
+ * @return WP_REST_Response
+ */
+function pf_filter_careers_pages(WP_REST_Request $request) {
+    $query = new WP_Query(array_merge(
+        SEARCH_QUERY_BASE,
+        array('post_parent' => CAREERS_PAGE_ID),
+        pf_get_meta_query(
+            $request,
+            ['industry_labels', 'service_labels', 'keyword_labels', 'skill_labels']
+        )));
+
+    return new WP_REST_Response(pf_list_query_careers_pages($query));
 }
 
 function pf_reg_methods_v1() {
@@ -220,6 +255,16 @@ function pf_reg_methods_v1() {
         array(
             'methods'   => 'GET',
             'callback'  => 'pf_filter_researches',
+            'permission_callback' => '__return_true'
+        )
+    );
+
+    register_rest_route(
+        API_NAMESPACE . "/v${v}",  // pages-api/v1
+        'careers',                    // route
+        array(
+            'methods'   => 'GET',
+            'callback'  => 'pf_filter_careers_pages',
             'permission_callback' => '__return_true'
         )
     );
