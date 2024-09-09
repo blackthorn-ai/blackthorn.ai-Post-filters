@@ -77,6 +77,7 @@ function pf_list_query_project_pages(WP_Query $query): array {
         return array(
             'description' => pf_cut_words($description, 240),
             'keywords'    => get_field('keyword_labels', $page->ID),
+            'publication_date'=> get_the_date('F j, Y g:i a', $page->ID),
             'link'        => $page->post_name,
             'title'       => $page->post_title,
             'thumbnail'   => get_the_post_thumbnail_url($page->ID),
