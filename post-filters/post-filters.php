@@ -6,7 +6,7 @@
 * Plugin Name: Post filters
 * Plugin URI: https://www.blackthorn.ai/
 * Description: This plugin add REST API for projects, research, careers and blog posts filtering.
-* Version: 2024.09.09
+* Version: 2024.09.09-1
 * Author: Pavlo Tymoshenko, Anastasiia Hrynyshyn
 **/
 
@@ -151,10 +151,33 @@ function pf_list_query_careers_pages(WP_Query $query): array {
     return array_map($extract_page, $query->posts);
 }
 
+function pf_list_query_events_pages(WP_Query $query): array {
+    $extract_page = function($page): array {
+        return array(
+            'description' => pf_cut_words(get_field('description', $page->ID), 240),
+            'event_date'    => get_field('event_date', $page->ID),
+            'event_link'    => get_field('event_link', $page->ID),
+            'event_date_label'    => get_field('event_date_label', $page->ID),
+            'date'    => get_field('date_labels', $page->ID),
+            'domains'    => get_field('domain_labels', $page->ID),
+            'title'       => $page->post_title,
+            'link'        => $page->post_name,
+            'thumbnail'   => get_the_post_thumbnail_url($page->ID),
+            'filtering'   => array(
+                'date_labels'  => get_field('date_labels', $page->ID),
+                'domain_labels'  => get_field('domain_labels', $page->ID)
+            )
+        );
+    };
+
+    return array_map($extract_page, $query->posts);
+}
+
 const PROJECTS_PAGE_ID   = 755;
 const BLOG_PAGE_ID       = 1651;
 const RESEARCHES_PAGE_ID = 1720;
 const CAREERS_PAGE_ID    = 1796;
+const EVENTS_PAGE_ID     = 2045;
 
 const SEARCH_QUERY_BASE = array(
     'numberposts'  => -1,
@@ -230,6 +253,22 @@ function pf_filter_careers_pages(WP_REST_Request $request) {
     return new WP_REST_Response(pf_list_query_careers_pages($query));
 }
 
+/**
+ * pf_filter_events_pages
+ * @return WP_REST_Response
+ */
+function pf_filter_events_pages(WP_REST_Request $request) {
+    $query = new WP_Query(array_merge(
+        SEARCH_QUERY_BASE,
+        array('post_parent' => EVENTS_PAGE_ID),
+        pf_get_meta_query(
+            $request,
+            ['date_labels', 'domain_labels']
+        )));
+
+    return new WP_REST_Response(pf_list_query_events_pages($query));
+}
+
 function pf_reg_methods_v1() {
     $v         = '1';
 
@@ -269,6 +308,16 @@ function pf_reg_methods_v1() {
         array(
             'methods'   => 'GET',
             'callback'  => 'pf_filter_careers_pages',
+            'permission_callback' => '__return_true'
+        )
+    );
+
+    register_rest_route(
+        API_NAMESPACE . "/v${v}",  // pages-api/v1
+        'events',                  // route
+        array(
+            'methods'   => 'GET',
+            'callback'  => 'pf_filter_events_pages',
             'permission_callback' => '__return_true'
         )
     );
