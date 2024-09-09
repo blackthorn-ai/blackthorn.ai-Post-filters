@@ -85,7 +85,6 @@ function pf_list_query_project_pages(WP_Query $query): array {
                 'keyword_labels'  => get_field('keyword_labels', $page->ID),
                 'service_labels'  => get_field('service_labels', $page->ID),
                 'type_labels'     => get_field('type_labels', $page->ID),
-                'type_labels'     => get_field('type_labels', $page->ID),
                 'industry_labels' => get_field('industry_labels', $page->ID)
             )
         );
@@ -98,7 +97,6 @@ function pf_list_query_research_pages(WP_Query $query): array {
     $extract_page = function($page): array {
         return array(
             'description' => pf_cut_words(get_field('description', $page->ID), 240),
-            'article'     => get_field('article_link', $page->ID),
             'article'     => get_field('article_link', $page->ID),
             'keywords'    => get_field('keyword_labels', $page->ID),
             'pdf'         => get_field('pdf_link', $page->ID),
@@ -184,7 +182,6 @@ const EVENTS_PAGE_ID     = 2045;
 const SEARCH_QUERY_BASE = array(
     'numberposts'  => -1,
     'nopaging' => true,
-    'nopaging' => true,
     'post_type'    => 'page',
     'post_status'  => 'publish',
     'meta_key'     => 'display_order',
@@ -202,7 +199,6 @@ function pf_filter_project_pages(WP_REST_Request $request) {
         array('post_parent' => PROJECTS_PAGE_ID),
         pf_get_meta_query(
             $request,
-            ['industry_labels', 'service_labels', 'type_labels', 'keyword_labels']
             ['industry_labels', 'service_labels', 'type_labels', 'keyword_labels']
         )));
 
