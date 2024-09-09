@@ -83,6 +83,7 @@ function pf_list_query_project_pages(WP_Query $query): array {
             'filtering'   => array(
                 'keyword_labels'  => get_field('keyword_labels', $page->ID),
                 'service_labels'  => get_field('service_labels', $page->ID),
+                'type_labels'     => get_field('type_labels', $page->ID),
                 'industry_labels' => get_field('industry_labels', $page->ID)
             )
         );
@@ -174,7 +175,7 @@ function pf_filter_project_pages(WP_REST_Request $request) {
         array('post_parent' => PROJECTS_PAGE_ID),
         pf_get_meta_query(
             $request,
-            ['industry_labels', 'service_labels', 'keyword_labels']
+            ['industry_labels', 'service_labels', 'type_labels', 'keyword_labels']
         )));
 
     return new WP_REST_Response(pf_list_query_project_pages($query));
