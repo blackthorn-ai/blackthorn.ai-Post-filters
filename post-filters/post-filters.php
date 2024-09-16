@@ -154,18 +154,20 @@ function pf_list_query_careers_pages(WP_Query $query): array {
 function pf_list_query_events_pages(WP_Query $query): array {
     $extract_page = function($page): array {
         return array(
-            'description' => pf_cut_words(get_field('description', $page->ID), 240),
-            'event_date'    => get_field('event_date', $page->ID),
-            'event_link'    => get_field('event_link', $page->ID),
-            'event_date_label'    => get_field('event_date_label', $page->ID),
-            'date'    => get_field('date_labels', $page->ID),
-            'domains'    => get_field('domain_labels', $page->ID),
-            'title'       => $page->post_title,
-            'link'        => $page->post_name,
-            'thumbnail'   => get_the_post_thumbnail_url($page->ID),
-            'filtering'   => array(
+            'description'      => pf_cut_words(get_field('description', $page->ID), 240),
+            'event_date'       => get_field('event_date', $page->ID),
+            'event'            => get_field('event_link', $page->ID),
+            'event_link'       => get_field('event_link', $page->ID),
+            'event_date_label' => get_field('event_date_label', $page->ID),
+            'date'             => get_field('date_labels', $page->ID),
+            'domains'          => get_field('domain_labels', $page->ID),
+            'title'            => $page->post_title,
+            'link'             => get_field('event_link', $page->ID),
+            'thumbnail'        => get_the_post_thumbnail_url($page->ID),
+            'filtering'        => array(
                 'date_labels'  => get_field('date_labels', $page->ID),
-                'domain_labels'  => get_field('domain_labels', $page->ID)
+                'host_labels'  => get_field('host_labels', $page->ID),
+                'domain_labels'=> get_field('domain_labels', $page->ID)
             )
         );
     };
