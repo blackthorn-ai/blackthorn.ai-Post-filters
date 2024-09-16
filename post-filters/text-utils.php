@@ -48,3 +48,28 @@ function pf_remove_a_tag($text) {
         $text
     );
 }
+
+/*
+Decide is it Past or Future event based on date;
+*/
+function pf_is_upcoming_or_past_event($page_id) {
+    $start_date = get_field('event_date', $page_id);
+    $end_date = get_field('end_date', $page_id);
+    
+    $current_date_timestamp = strtotime(date('Y-m-d'));
+
+    if ($end_date) {
+        $event_date_timestamp = strtotime($end_date);
+    } elseif ($start_date) {
+        $event_date_timestamp = strtotime($start_date);
+    } else {
+        return ["Past"];
+    }
+
+    if ($current_date_timestamp <= $event_date_timestamp) {
+        return ["Upcoming"];
+    }
+    else {
+        return ["Past"];
+    }
+}
