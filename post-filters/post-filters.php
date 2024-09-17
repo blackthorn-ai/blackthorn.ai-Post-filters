@@ -163,6 +163,7 @@ function pf_list_query_events_pages(WP_Query $query): array {
             'event_date_label' => get_field('event_date_label', $page->ID),
             'date'             => $date_labels,
             'domains'          => get_field('domain_labels', $page->ID),
+            'host'             => get_field('host_labels', $page->ID),
             'title'            => $page->post_title,
             'link'             => get_field('event_link', $page->ID),
             'thumbnail'        => get_the_post_thumbnail_url($page->ID),
