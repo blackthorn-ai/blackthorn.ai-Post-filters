@@ -116,9 +116,15 @@ function pf_list_query_research_pages(WP_Query $query): array {
 
 function pf_list_query_blog_pages(WP_Query $query): array {
     $extract_page = function($page): array {
+        $blog_keyword_labels = get_field('blog_keyword_labels', $page->ID);
+        
+        $blog_keyword_labels_transformed = array_map(function($item) {
+            return $item['label'];
+        }, $blog_keyword_labels);
+
         return array(
             'description' => pf_cut_words(get_field('description', $page->ID), 240),
-            'keywords'    => get_field('keyword_labels', $page->ID),
+            'keywords'    => $blog_keyword_labels_transformed,
             'publication_date'=> get_field('publication_date', $page->ID),
             'theme'       => get_field('theme', $page->ID),
             'time_to_read'=> get_field('time_to_read', $page->ID),
@@ -126,7 +132,7 @@ function pf_list_query_blog_pages(WP_Query $query): array {
             'title'       => $page->post_title,
             'thumbnail'   => get_the_post_thumbnail_url($page->ID),
             'filtering'   => array(
-                'keyword_labels'  => get_field('keyword_labels', $page->ID)
+                'blog_keyword_labels'  => $blog_keyword_labels_transformed,
             )
         );
     };
@@ -220,7 +226,7 @@ function pf_filter_blog_pages(WP_REST_Request $request) {
         array('post_parent' => BLOG_PAGE_ID),
         pf_get_meta_query(
             $request,
-            ['keyword_labels']
+            ['blog_keyword_labels'],
         )));
 
     return new WP_REST_Response(pf_list_query_blog_pages($query));
