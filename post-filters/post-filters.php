@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -6,7 +5,7 @@
 * Plugin Name: Post filters
 * Plugin URI: https://www.blackthorn.ai/
 * Description: This plugin add REST API for projects, research, careers and blog posts filtering.
-* Version: 2024.09.09-1
+* Version: 2024.10.03
 * Author: Pavlo Tymoshenko, Anastasiia Hrynyshyn
 **/
 
